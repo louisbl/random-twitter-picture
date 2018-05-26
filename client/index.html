@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		body {
+			background: royalblue;
+		}
+
+		.progress {
+			width: 100px;
+			height: 5px;
+			position: relative;
+			border: 1px solid #fff;
+		}
+
+		.progress:before {
+			content: '';
+			width: 0;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: #333;
+		}
+
+		.progress.animate:before {
+			width: 100%;
+			transition: width 5s linear;
+		}
+	</style>
+</head>
+<body>
+
+	<p>Rentrer un mot-clef :</p>
+	<input type="text" class="new-keyword" placeholder="Entrée pour envoyer">
+	<p class="keywords"></p>
+	<div class="progress"></div>
+	<p class="message"></p>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		const socket = io('http://localhost:5000');
+		const newWord = document.querySelector('.new-keyword');
+		const keywordsList = document.querySelector('.keywords');
+		const message = document.querySelector('.message');
+		const progress = document.querySelector('.progress');
+		let inputHaveChanged = false;
+
+		newWord.addEventListener('change', () => {
+			if (!inputHaveChanged) {
+				inputHaveChanged = true;
+				message.innerHTML = '';
+				progress.classList.add('animate');
+				setTimeout(() => {
+					inputHaveChanged = false;
+					socket.emit('end');
+					keywordsList.innerHTML = '';
+					progress.classList.remove('animate');
+					message.innerHTML = 'Photo de profil changée !'
+				}, 5000);
+			}
+			socket.emit('track-word', newWord.value);
+			newWord.value = '';
+		});
+
+		socket.on('tweet', tweet => {
+			result.innerHTML += `<p>${tweet}</p>`;
+		});
+
+		socket.on('keywords', keywords => {
+			keywordsList.innerHTML = keywords;
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "random-pp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./server/index.js",
+    "dev": "parcel watch ./client/index.html --public-url ./"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.16.3",
+    "jpeg-js": "^0.3.4",
+    "path": "^0.12.7",
+    "twitter": "^1.7.1"
+  },
+  "dependencies": {
+    "socket.io": "^2.1.0"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "client/",
+      "dist/",
+      ".cache/"
+    ]
+  }
+}
